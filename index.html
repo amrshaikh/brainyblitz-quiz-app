@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrainyBlitz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100 text-gray-800 flex flex-col items-center justify-center min-h-screen p-4 md:py-8">
+
+    <div id="app" class="w-full max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-6 md:p-10">
+
+        <!-- Home Screen -->
+        <div id="home-screen">
+            <h1 class="text-3xl md:text-4xl font-bold text-center text-indigo-600 mb-2">Welcome to BrainyBlitz!</h1>
+            <p class="text-center text-gray-500 mb-8">Choose a category to start the challenge.</p>
+            <div id="category-grid" class="grid grid-cols-1 md:grid-cols-4 gap-4 [grid-auto-rows:1fr]">
+                <!-- Categories will be injected here by JavaScript -->
+            </div>
+            <div class="mt-8 flex flex-col md:flex-row items-center justify-center gap-4">
+                <div class="relative">
+                    <label for="difficulty-select" class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900">Difficulty</label>
+                    <select id="difficulty-select" class="w-full md:w-auto appearance-none block pl-3 pr-10 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="easy">Easy</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+                <button id="start-quiz-btn" class="bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-indigo-700 transition-colors w-full md:w-auto disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center" disabled>
+                    <svg id="spinner" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span id="start-quiz-text">Start Quiz</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h2 id="quiz-category-title" class="text-2xl font-bold text-indigo-600">Category</h2>
+                <p class="text-gray-600 font-medium"><span id="question-counter">1</span> / 10</p>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                <div id="timer-bar" class="bg-indigo-600 h-2.5 rounded-full" style="width: 100%;"></div>
+            </div>
+            <div class="bg-gray-50 p-6 rounded-lg shadow-inner mb-6">
+                <p id="question-text" class="text-lg font-medium text-center">Question text will appear here.</p>
+            </div>
+            <div id="answers-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+            <div class="mt-8 text-center">
+                <button id="next-btn" class="bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-indigo-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed w-full md:w-auto" disabled>Next</button>
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="hidden text-center">
+            <h1 class="text-4xl font-bold text-indigo-600 mb-4">Quiz Complete!</h1>
+            <div id="score-container" class="bg-indigo-50 p-8 rounded-2xl mb-6">
+                 <p class="text-lg text-gray-600 mb-2">Your Score</p>
+                 <p id="score" class="text-6xl font-bold text-indigo-600">0%</p>
+            </div>
+            <p id="result-message" class="text-xl font-medium mb-8">Result message goes here.</p>
+            <div class="flex flex-col md:flex-row justify-center gap-4">
+                <button id="review-answers-btn" class="bg-green-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-700 transition-colors w-full md:w-auto">Review Answers</button>
+                <button id="try-again-btn" class="bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-indigo-700 transition-colors w-full md:w-auto">Try Again</button>
+                <button id="go-home-btn" class="bg-gray-200 text-gray-800 font-bold py-3 px-6 rounded-lg hover:bg-gray-300 transition-colors w-full md:w-auto">Go to Home</button>
+            </div>
+        </div>
+
+        <!-- Review Screen -->
+        <div id="review-screen" class="hidden">
+            <h1 class="text-3xl font-bold text-center text-indigo-600 mb-8">Review Your Answers</h1>
+            <div id="review-container" class="space-y-8">
+                <!-- Review content will be injected here -->
+            </div>
+            <div class="mt-8 text-center">
+                <button id="back-to-results-btn" class="bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-indigo-700 transition-colors w-full md:w-auto">Back to Results</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center text-sm text-gray-500 py-4">
+        <p>Created by <a href="https://github.com/amrshaikh" target="_blank" rel="noopener noreferrer" class="footer-link">Amr.</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
